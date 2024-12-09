@@ -1,0 +1,20 @@
+
+.main{
+  position: fixed;
+  font-family: "Poppins", sans-serif;
+}
+.submit{
+  cursor: pointer;
+}
+.submit:hover{
+  color: white;
+  background-color: rgb(67, 65, 217);
+}
+.track:hover{
+  color: white;
+  background-color: rgb(67, 65, 217);
+}
+.navbar{
+  
+  height: 1000px;
+}
