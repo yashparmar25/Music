@@ -11,21 +11,39 @@ const songRoutes=require("./routes/song");
 const playlistRoutes=require("./routes/playlist"); 
 
 const port=5000;
-const DATABASE_URL = process.env.DATABASE_URL;
-require("dotenv").config();
+const DATABASE_URL = process.env.DATABASE_URL || "mongodb://localhost:27017/elite_music";
 const cors = require("cors"); 
 const mongoose=require("mongoose");
+
+// Set strictQuery to false to prepare for Mongoose 7
+mongoose.set('strictQuery', false);
 
 app.use(cors());
 app.use(express.json());
 
-mongoose.connect(DATABASE_URL)
-.then((x)=>{
-  console.log("Connected...!!!");
+// Database connection with improved error handling
+if (!DATABASE_URL) {
+    console.error("DATABASE_URL is not defined in environment variables");
+    process.exit(1);
+}
+
+mongoose.connect(DATABASE_URL, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    serverSelectionTimeoutMS: 5000, // Timeout after 5s instead of 30s
+    socketTimeoutMS: 45000, // Close sockets after 45s of inactivity
 })
-.catch((err)=>{
-  console.log("Not Connected....!!!")
+.then(() => {
+    console.log("Successfully connected to MongoDB.");
 })
+.catch((err) => {
+    console.error("MongoDB connection error:", err);
+    console.log("\nTo fix this error:");
+    console.log("1. If using local MongoDB: Make sure MongoDB is installed and running");
+    console.log("2. If using MongoDB Atlas: Check your connection string in .env file");
+    console.log("3. Verify your network connection and firewall settings");
+    process.exit(1);
+});
 
 let opts = {}
 opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();

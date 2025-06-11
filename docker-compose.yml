@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  backend:
+    image: yashparmar2055/elite-backend:latest
+    container_name: elite-backend
+    ports:
+      - "5000:5000"
+    env_file:
+      - ./elite-backend/.env
+    depends_on:
+      - mongo
+
+  frontend:
+    image: yashparmar2055/elite-frontend:latest
+    container_name: elite-frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+
+  mongo:
+    image: mongo
+    restart: always
+    container_name: mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+
+volumes:
+  mongo-data:

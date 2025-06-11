@@ -33,7 +33,7 @@ const SignupComponent = () => {
             setCookie("token",token,{path:"/",expires:date});
           
             alert("Success");
-            navigate('/home');  
+            navigate('/');  
           }
           else
           {
